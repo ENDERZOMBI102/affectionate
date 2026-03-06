@@ -39,15 +39,16 @@ import net.minecraft.world.entity.LivingEntity;
 
 @Environment(EnvType.CLIENT)
 public final class AffectionateClient implements ClientModInitializer {
-	private static final KeyMapping SEND_HEART_KEY_BIND = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-			"key.affectionate.interact", InputConstants.KEY_G, KeyMapping.CATEGORY_MULTIPLAYER
-	));
+	private static final KeyMapping SEND_HEART_KEY_BIND = new KeyMapping(
+		"key.affectionate.interact", InputConstants.KEY_G, KeyMapping.CATEGORY_MULTIPLAYER
+	);
 
 	public static final AffectionateClient INSTANCE = new AffectionateClient();
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
 		EntityRendererRegistry.register(Affectionate.LAP_SEAT_ENTITY_TYPE, LapSeatEntityRenderer::new);
+		KeyBindingHelper.registerKeyBinding(SEND_HEART_KEY_BIND);
 
 		ClientPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, (payload, ctx) -> {
 			ctx.client().execute(() -> {
@@ -65,8 +66,8 @@ public final class AffectionateClient implements ClientModInitializer {
 		if (SEND_HEART_KEY_BIND.isDown() && client.player != null) {
 			if (!((AffectionatePlayerEntity) client.player).affectionate$isSendingHeart()) {
 				((AffectionatePlayerEntity) client.player).affectionate$startSendHeart();
-
-				ClientPlayNetworking.send(new SendHeartsPayload(0));
+				
+				ClientPlayNetworking.send(new SendHeartsPayload(-1));
 			}
 		}
 	}
