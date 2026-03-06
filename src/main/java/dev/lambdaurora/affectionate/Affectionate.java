@@ -26,9 +26,14 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.Formatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -38,8 +43,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public final class Affectionate implements ModInitializer {
+	public static final Logger LOGGER = LoggerFactory.getLogger(Affectionate.class);
 	public static final String NAMESPACE = "affectionate";
 
 	/* Tags */
@@ -99,11 +108,17 @@ public final class Affectionate implements ModInitializer {
 			});
 		});
 
-//		ResourceLoader.registerBuiltinResourcePack(id("recursive_sitting"), mod, ResourcePackActivationType.NORMAL,
-//				Text.literal("Affectionate").withStyle(Formatting.LIGHT_PURPLE)
-//						.append(Text.literal(" - ").withStyle(Formatting.GRAY))
-//						.append(Text.literal("Recursive Lap Sitting").withStyle(Formatting.RED))
-//		);
+		final var registeredPack = ResourceManagerHelper.registerBuiltinResourcePack(
+				id("recursive_sitting"),
+				FabricLoader.getInstance().getModContainer(mod.id()).orElseThrow(),
+				Text.literal("Affectionate").withStyle(Formatting.LIGHT_PURPLE)
+						.append(Text.literal(" - ").withStyle(Formatting.GRAY))
+						.append(Text.literal("Recursive Lap Sitting").withStyle(Formatting.RED)),
+				ResourcePackActivationType.NORMAL
+		);
+		if (!registeredPack) {
+			LOGGER.warn("Failed to register built-in resource pack.");
+		}
 	}
 
 	public static Identifier id(String path) {
