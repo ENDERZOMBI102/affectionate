@@ -37,7 +37,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.entity.LivingEntity;
 
-
 @Environment(EnvType.CLIENT)
 public final class AffectionateClient implements ClientModInitializer {
 	private static final KeyMapping SEND_HEART_KEY_BIND = KeyBindingHelper.registerKeyBinding(new KeyMapping(
@@ -50,7 +49,7 @@ public final class AffectionateClient implements ClientModInitializer {
 	public void onInitializeClient(ModContainer mod) {
 		EntityRendererRegistry.register(Affectionate.LAP_SEAT_ENTITY_TYPE, LapSeatEntityRenderer::new);
 
-		ClientPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, ( payload, ctx) -> {
+		ClientPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, (payload, ctx) -> {
 			ctx.client().execute(() -> {
 				if (ctx.client().level != null && ctx.client().level.getEntity(payload.playerId()) instanceof AffectionatePlayerEntity player) {
 					player.affectionate$startSendHeart();
@@ -58,7 +57,7 @@ public final class AffectionateClient implements ClientModInitializer {
 			});
 		});
 
-		ClientTickEvents.START_WORLD_TICK.register( this::onStartWorldTick );
+		ClientTickEvents.START_WORLD_TICK.register(this::onStartWorldTick);
 	}
 
 	public void onStartWorldTick(ClientLevel world) {
@@ -80,7 +79,7 @@ public final class AffectionateClient implements ClientModInitializer {
 	 * @param tickDelta the tick delta
 	 * @param <E> the type of entity the model accepts
 	 */
-	public static <E extends LivingEntity> void updatePlayerModel( PlayerModel<E> model, AffectionatePlayerEntity player, float tickDelta) {
+	public static <E extends LivingEntity> void updatePlayerModel(PlayerModel<E> model, AffectionatePlayerEntity player, float tickDelta) {
 		if (player.affectionate$isSendingHeart()) {
 			float delta = player.affectionate$getHeartSendingDelta(tickDelta);
 

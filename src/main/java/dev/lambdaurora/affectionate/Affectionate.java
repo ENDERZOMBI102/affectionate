@@ -26,7 +26,6 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.impl.networking.GlobalReceiverRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -60,7 +59,7 @@ public final class Affectionate implements ModInitializer {
 	public static final int SENDING_HEARTS_TICKS = 10;
 
 	@Override
-	public void onInitialize( ModContainer mod ) {
+	public void onInitialize(ModContainer mod) {
 		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
 			if (!world.isClientSide() && entity instanceof Player otherPlayer
 					&& otherPlayer.getPassengers().stream().noneMatch(e -> e instanceof LapSeatEntity)) {
@@ -85,7 +84,7 @@ public final class Affectionate implements ModInitializer {
 
 		PayloadTypeRegistry.playS2C().register(SendHeartsPayload.TYPE, SendHeartsPayload.CODEC);
 		PayloadTypeRegistry.playC2S().register(SendHeartsPayload.TYPE, SendHeartsPayload.CODEC);
-		ServerPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, ( sPayload, ctx) -> {
+		ServerPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, (sPayload, ctx) -> {
 			ctx.server().execute(() -> {
 				var affectionatePlayer = (AffectionatePlayerEntity) ctx.player();
 
@@ -107,7 +106,7 @@ public final class Affectionate implements ModInitializer {
 //		);
 	}
 
-	public static Identifier id( String path) {
+	public static Identifier id(String path) {
 		return Identifier.of(NAMESPACE, path);
 	}
 

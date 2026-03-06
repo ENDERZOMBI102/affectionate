@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 
-
 @Environment(EnvType.CLIENT)
 public class LapSeatEntityRenderer extends NoopRenderer<LapSeatEntity> {
 	public LapSeatEntityRenderer(EntityRendererProvider.Context ctx) {

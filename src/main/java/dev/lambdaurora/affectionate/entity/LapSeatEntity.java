@@ -94,12 +94,12 @@ public class LapSeatEntity extends Entity {
 
 
 	@Override
-	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+	protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
 		builder.define(OWNER, 0);
 	}
 
 	@Override
-	public @NotNull Vec3 getPassengerRidingPosition( Entity entity ) {
+	public @NotNull Vec3 getPassengerRidingPosition(Entity entity) {
 		return this.getPos();
 	}
 

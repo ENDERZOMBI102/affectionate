@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import static dev.lambdaurora.affectionate.Affectionate.id;
 
-
 public record SendHeartsPayload(int playerId) implements CustomPacketPayload {
 	public static final StreamCodec<FriendlyByteBuf, SendHeartsPayload> CODEC = CustomPacketPayload.codec(SendHeartsPayload::write, SendHeartsPayload::new);
 	public static final CustomPacketPayload.Type<SendHeartsPayload> TYPE = new CustomPacketPayload.Type<>(id("send_hearts"));
