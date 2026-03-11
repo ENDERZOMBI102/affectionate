@@ -56,6 +56,7 @@ public class LapSeatEntity extends Entity {
 
 	public void setTrackedOwner(LivingEntity trackedOwner) {
 		this.entityData.set(OWNER, trackedOwner == null ? 0 : trackedOwner.getId());
+		this.updateTrackedPosition(Entity::setPos);
 	}
 
 	@Override
@@ -76,9 +77,10 @@ public class LapSeatEntity extends Entity {
 	public void updateTrackedPosition(Entity.MoveFunction positionUpdater) {
 		if (this.trackedOwner == null) return;
 
-		var relativePos = new Vector3f(0.f, .4f, .55f);
-		relativePos.rotate(new Quaternionf().rotationXYZ(0.f, -Affectionate.getEffectiveBodyYaw(this.trackedOwner) * Constants.DEG_TO_RAD, 0.f));
-		Vec3 transformedPos = new Vec3(relativePos);
+		var relativePos = new Vec3(0.d, .7d, .55d);
+		Vec3 transformedPos = relativePos
+				.scale(this.trackedOwner.getAgeScale())
+				.yRot(Affectionate.getEffectiveBodyYaw(this.trackedOwner) * -Constants.RAD_TO_DEG);
 
 		var newPos = this.trackedOwner.getPos().add(transformedPos);
 		positionUpdater.accept(this, newPos.x(), newPos.y(), newPos.z());

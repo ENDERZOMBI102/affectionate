@@ -65,9 +65,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Affectio
 			this.affectionate$heartSendingTicks--;
 
 			if (this.level().isClientSide() && this.affectionate$heartSendingTicks <= 5) {
-				var relativePos = new Vector3f(0.f, 1.5f, .60f);
-				relativePos.rotate(new Quaternionf().rotationXYZ(0.f, -Affectionate.getEffectiveBodyYaw(this) * Constants.DEG_TO_RAD, 0.f));
-				Vec3 transformedPos = new Vec3(relativePos);
+				var relativePos = new Vec3(0.d, 1.5d, .60d);
+				Vec3 transformedPos = relativePos
+					.scale(this.getAgeScale())
+					.yRot(Affectionate.getEffectiveBodyYaw(this) * -Constants.RAD_TO_DEG);
 
 				var pos = this.getPos().add(transformedPos);
 				this.level().addAlwaysVisibleParticle(ParticleTypes.HEART,

@@ -4,6 +4,7 @@
     "version": "${version}",
     "name": "Affectionate",
     "description": "A mod about affectionate player interactions, made for Modfest: Singularity.",
+    "environment": "*",
     "authors": [ "LambdAurora" ],
     "contributors": [ "ENDERZOMBI102" ],
     "contact": {

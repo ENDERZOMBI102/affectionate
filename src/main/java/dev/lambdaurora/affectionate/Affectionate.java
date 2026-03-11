@@ -81,8 +81,9 @@ public final class Affectionate implements ModInitializer {
 				if (lapSeat == null)
 					return InteractionResult.PASS;
 
-				world.addFreshEntity(lapSeat);
+				// Track player and set position before spawning.
 				lapSeat.setTrackedOwner(otherPlayer);
+				world.addFreshEntity(lapSeat);
 				player.startRiding(lapSeat, true);
 
 				return InteractionResult.SUCCESS;
@@ -93,15 +94,17 @@ public final class Affectionate implements ModInitializer {
 
 		PayloadTypeRegistry.playS2C().register(SendHeartsPayload.TYPE, SendHeartsPayload.CODEC);
 		PayloadTypeRegistry.playC2S().register(SendHeartsPayload.TYPE, SendHeartsPayload.CODEC);
+
 		ServerPlayNetworking.registerGlobalReceiver(SendHeartsPayload.TYPE, (sPayload, ctx) -> {
 			ctx.server().execute(() -> {
-				var affectionatePlayer = (AffectionatePlayerEntity) ctx.player();
+				final var player = ctx.player();
+				final var affectionatePlayer = (AffectionatePlayerEntity) player;
 
 				if (!affectionatePlayer.affectionate$isSendingHeart()) {
 					affectionatePlayer.affectionate$startSendHeart();
 
-					var payload = new SendHeartsPayload(ctx.player().getId());
-					for (ServerPlayer tracking : PlayerLookup.tracking(ctx.player())) {
+					var payload = new SendHeartsPayload(player.getId());
+					for (ServerPlayer tracking : PlayerLookup.tracking(player)) {
 						ServerPlayNetworking.send(tracking, payload);
 					}
 				}
